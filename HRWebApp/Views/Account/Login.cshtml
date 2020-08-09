@@ -1,0 +1,42 @@
+﻿
+@model HRWebApp.Models.Login
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Login</h2>
+@{
+    if (Session["user"] != null)
+    {
+    <p>You are already Login, If you want to logout click @Html.ActionLink("here", "logout", null, null)</p>
+    }
+    else
+    {
+        <p>@ViewBag.Message</p>
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+        using (Html.BeginForm("Login", "Account", FormMethod.Post, new {id = "Form"}))
+        {
+            HtmlHelper.ClientValidationEnabled = true;
+
+            <div>
+                <label for="email">Email</label>
+            </div>
+
+
+            @Html.TextBoxFor(m => m.Email, null, new {@id = "email", @required = true})
+            ;
+            @Html.ValidationMessageFor(m => m.Email, "", new {@class = "text-danger"})
+            <div>
+                <label for="password">Password</label>
+            </div>
+            @Html.PasswordFor(m => m.Password)
+            ;
+            @Html.ValidationMessageFor(m => m.Password, "", new {@class = "text-danger"})
+            <div><button class="btn btn-secondary" style="margin: 2rem auto;" id="btn-submit1" value="submit">Login</button></div>
+        }
+    }
+}
+

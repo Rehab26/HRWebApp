@@ -1,0 +1,65 @@
+﻿@model HRWebApp.Models.Vacation
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Request Vacation</h2>
+@{
+    if (TempData["Done"] != null)
+    {
+        <h3>Successful</h3>
+        <hr/>
+        <p>@TempData["Done"]</p>
+        <a href="~/Vacation/vacations" class="btn btn-outline-primary">Go to Vacation history</a>
+    }
+    else
+    {
+
+        using (Html.BeginForm("Add", "Vacation", FormMethod.Post, new 
+        { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+<div class="form-horizontal">
+    <h4>Vacation</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EnumDropDownListFor(model => model.Type)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Attachment)
+        @Html.TextBoxFor(m => m.PostedFile, new { type = "file" })
+        @Html.ValidationMessageFor(m => m.PostedFile)
+        <small id="fileHelp" class="form-text text-muted">Optional | pdf file only</small>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" name="Save" value="Send" class="btn btn-primary" />
+            <input type="submit" name="Draft" value="Draft" class="btn btn-secondary" />
+        </div>
+    </div>
+</div>
+        }
+    }
+}

@@ -1,0 +1,35 @@
+﻿@model HRWebApp.Models.User
+
+@{
+    ViewBag.Title = "Create Employee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 id="element">Add Employee</h2>
+@{
+    if (TempData["SucessMessage"] != null)
+    {
+        <script type="text/javascript">
+            var markup = '<div class="alert alert-dismissible alert-success"><strong>done!</strong> @TempData["SucessMessage"].</div>';
+            var htmlElement = document.querySelector("#element");
+            $(markup).insertAfter("#element");
+        </script>
+        <div>
+            @Html.ActionLink("Back to Dashboard", "Index")
+        </div>
+    }
+    else
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        using (Html.BeginForm("Create", "User", FormMethod.Post)){
+                @Html.AntiForgeryToken()
+                @Html.Partial("_UserForm");
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-secondary" />
+                </div>
+            </div>
+            }
+        }
+}

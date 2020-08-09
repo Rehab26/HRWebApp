@@ -1,0 +1,10 @@
+﻿@using System.Web.UI.HtmlControls
+@model HRWebApp.Models.User
+@using HRWebApp.Helpers
+
+@{
+    ViewBag.Title = "index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Welcome @Model.FullName</h2>

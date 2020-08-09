@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 id="element">Delete</h2>
+
+<script type="text/javascript">
+    var markup = `<div class="alert alert-dismissible alert-success"><strong>done!</strong> Employee has been deleted .</div>`;
+    var htmlElement = document.querySelector("#element");
+    $(markup).insertAfter("#element");
+</script>

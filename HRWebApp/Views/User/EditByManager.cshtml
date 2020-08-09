@@ -1,0 +1,25 @@
+﻿@model HRWebApp.Models.User 
+
+@{
+    ViewBag.Title = "Edit Employee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Your Employee</h2>
+@{
+    
+    using (Html.BeginForm("EditEmployee", "User", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Partial("_UserForm");
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Update" class="align-content-center btn btn-outline-primary" />
+            </div>
+        </div>
+    }
+}
+<div>
+    @Html.ActionLink("Back to List", "Employees")
+</div>
+

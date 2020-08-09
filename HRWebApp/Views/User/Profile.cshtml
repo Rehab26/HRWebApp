@@ -1,0 +1,66 @@
+﻿@model HRWebApp.Models.User
+
+@{
+    ViewBag.Title = "UserProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>UserProfile</h2>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="list-group-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FullName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.JobTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.JobTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EarnSickLeave)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EarnSickLeave)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EarnAnnualLeave)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EarnAnnualLeave)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new {id = Model.ID})*@
+</p>

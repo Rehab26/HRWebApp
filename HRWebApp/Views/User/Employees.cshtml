@@ -1,0 +1,120 @@
+﻿@using HRWebApp.Models
+@model HRWebApp.Models.UserView
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Employees";
+}
+
+
+
+<h2>Employees</h2>
+<div class="Table-container">
+    <br />
+    <div>
+        <table id="demoGrid" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>email</th>
+                <th>phoneNumber</th>
+                <th>fullName</th>
+                <th>jobTitle</th>
+                <th>earnSickLeave</th>
+                <th>earnAnnualLeave</th>
+                <th>Operations</th>
+            </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>email</th>
+                    <th>phoneNumber</th>
+                    <th>fullName</th>
+                    <th>jobTitle</th>
+                    <th>earnSickLeave</th>
+                    <th>earnAnnualLeave</th>
+                    <th>Operations</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script>
+
+    // DataTable
+    var table = $('#demoGrid').DataTable({
+        "sAjaxSource": "GetEmployees",
+        "bServerSide": true,
+        "bProcessing": true,
+        "bSearchable": true,
+
+        "dataSrc": "",
+        "order": [[1, 'asc']],
+        "iDisplayStart": 0,
+        "iDisplayLength": 5,
+        "sEcho": "sEcho",
+        "columns": [
+            { "data": "ID" },
+            { "data": "Email" },
+            { "data": "PhoneNumber" },
+            { "data": "FullName" },
+            { "data": "JobTitle" },
+            { "data": "EarnSickLeave" },
+            { "data": "EarnAnnualLeave" },
+            { // this is Actions Column
+                mRender: function(data, type, row) {
+                    var linkEdit = '@Html.ActionLink("Edit", "EditByManager",
+                                        new {id = -1})';
+                    linkEdit = linkEdit.replace("-1", row.ID);
+
+                    var linkDetails = '@Html.ActionLink("Details", "EmployeeProfile", new {id = -1})';
+                    linkDetails = linkDetails.replace("-1", row.ID);
+
+                    var linkDelete = `<button type="button" value=${row.ID} id="delete=btn" name=${row.FullName} class="btn btn-primary">Delete</button>`;
+
+                    return linkDetails + " | " + linkEdit + " | " + linkDelete;
+                }
+            }
+        ],
+
+        "columnDefs": [
+            {
+                "targets": [0],
+                "visible": false,
+                "searchable": true,
+            }
+        ]
+    });
+    table.on("click",
+        "button",
+        function () {
+            var id = this.value;
+            swal({
+                title: `Are you sure you want to delete ${this.name}?`,
+                buttons: {
+                    cancel: true,
+                    confirm: "Delete"
+                },
+                dangerMode: true,
+                closeOnClickOutside: true
+            }).then((value) => {
+                if (value) {
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        url: 'Delete',
+                        data: { "id": id },
+                        dataType: "json",
+                        success: function () {
+                            swal("Done!", "Employee has been deleted!", "success");
+                            location.reload(true);
+                        },
+                        error: function () {
+                            swal("Error", "Something Went Wrong!", "danger");
+                        }
+                    });
+                }
+            });
+        });
+</script>

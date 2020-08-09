@@ -1,0 +1,119 @@
+﻿@model HRWebApp.Models.VacationView
+
+@{
+    ViewBag.Title = "Vacations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Vacations</h2>
+<div class="Table-container">
+    <br />
+    <div>
+        <table id="vacations" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                    <th>Reject Reason</th>
+                    <th>Attachment</th>
+                    <th>Operation</th>
+</thead>
+        </table>
+    </div>
+</div>
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script>
+    var isRejected = true;
+    // DataTable
+    var table = $('#vacations').DataTable({
+        "sAjaxSource": "GetVacations",
+        "bServerSide": true,
+        "bProcessing": true,
+        "bSearchable": true,
+
+        "dataSrc": "",
+        "order": [[1, 'asc']],
+        "iDisplayStart": 0,
+        "iDisplayLength": 5,
+        "sEcho": "sEcho",
+        "columns": [
+            { "data": "ID" },
+            { "data": "Type" },
+            { "data": "StartDate" },
+            { "data": "EndDate" },
+            { "data": "Status" },
+            { "data": "RejectReason" },
+            { "data": "Attachment"  },
+            { // this is Actions Column
+                mRender: function(data, type, row) {
+                    if (row.Status === "Draft") {
+                        var linkEdit = '@Html.ActionLink("Edit", "Add", new {id = -1} )';
+                        linkEdit = linkEdit.replace("-1", row.ID);
+                        }
+                    if (row.Status !== "Reject") isRejected = false;
+
+                    var linkDetails = '@Html.ActionLink("Details", "Info", new {id = -1} )';
+                    if (row.Attachment !== null) {
+                        var linkAttachment = '@Html.ActionLink("File", "GetFile", new {id = -1})';
+                        row.Attachment = row.Attachment.replace(".pdf", "");
+                        linkAttachment = linkAttachment.replace("-1", row.Attachment);
+                    }
+                    linkDetails = linkDetails.replace("-1", row.ID);
+                    if(row.Status == "Draft"){
+                        var linkDelete = `<button type="button" value=${row.ID} id="delete=btn" class="btn btn-secondary">Delete</button>`;
+                        }
+                    if (linkEdit && linkAttachment)
+                        return linkAttachment + "|" + linkDetails + " | " + linkEdit + " | " + linkDelete;
+                    else if (linkEdit) return linkDetails + " | " + linkEdit + " | " + linkDelete;
+                    else if (row.Attachment) return linkAttachment + "|" + linkDetails;
+                    else return linkDetails;
+                }
+            }
+        ],
+
+        "columnDefs": [
+            {
+                "targets": [0],
+                "visible": false,
+                "searchable": true
+
+            }
+            , { "targets": 6, "visible": false },
+            { "targets": 5, "visible":isRejected }
+        ]
+    });
+    table.on("click",
+        "button",
+        function () {
+            var id = this.value;
+            swal({
+                title: "Are you sure you want to delete vacation?",
+                buttons: {
+                    cancel: true,
+                    confirm: "Delete"
+                },
+                dangerMode: true,
+                closeOnClickOutside: true
+            }).then((value) => {
+                if (value) {
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        url: 'DeleteVacation',
+                        data:{"id":id},
+                        dataType: "json",
+                        success: function() {
+                            swal("Done!", "Vacation request Has been Deleted!", "success");
+                            location.reload(true);
+                        },
+                        error: function() {
+                            swal("Error", "Something Went Wrong!", "danger");
+                        }
+                    });
+                }
+            });
+        });
+</script>

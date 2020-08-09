@@ -1,0 +1,42 @@
+﻿@using HRWebApp.Models
+
+<ul class="sidebar  bg-dark">
+    <li><a href="#"><i class="fas fa-location-arrow"></i><span class="link-text">Vacation</span></a>
+        <ul class="sub-items">
+            @{
+                var user = (User)Session["user"];
+                if (user.Type == HRWebApp.Models.UserType.Employee)
+                {
+                    <li><a href="~/Vacation/Add"><span>Request Vacation</span></a></li>
+                    <li><a href="~/Vacation/vacations"><span>My Vacation History</span></a></li>
+                }
+                else
+                {
+                    <li><a href="~/Vacation/EmployeeVacation"><span>Requested Vacations</span></a></li>
+                }
+            }
+
+
+        </ul>
+    </li>
+@{
+    if (user.Type == HRWebApp.Models.UserType.Manager)
+    {
+        <li><a href="#"><i class="fas fa-users-cog"></i><span class="link-text">User</span></a>
+            <ul class="sub-items">
+                <li><a href="~/User/Create"><span> Add Employee</span></a></li>
+                <li><a href="~/User/Employees"><span>All Employees</span></a></li>
+            </ul>
+        </li>
+    }
+}
+    <li><a href="#"><i class="fas fa-id-card"></i><span class="link-text">Profile</span></a>
+        <ul class="sub-items">
+            <li><a href="~/User/Profile"><span>My Profile</span></a></li>
+            <li><a href="~/User/Edit"><span>Edit Profile</span></a></li>
+        </ul>
+    </li>
+<li>
+    <i class="fas fa-sign-out-alt"></i>
+    @Html.ActionLink("Logout" , "Logout" , "Account" , null , new {@class= "link-text" })</li>
+</ul>
